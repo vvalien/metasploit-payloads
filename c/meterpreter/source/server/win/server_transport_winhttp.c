@@ -36,6 +36,14 @@ static HINTERNET get_request_winhttp(HttpTransportContext *ctx, BOOL isGet, cons
 		return NULL;
 	}
 
+	if (ctx->headers)
+	{
+		if (!WinHttpAddRequestHeaders(hReq, ctx->headers, (ULONG)-1L, WINHTTP_ADDREQ_FLAG_ADD)) // or WINHTTP_ADDREQ_FLAG_REPLACE)
+		{
+			dprintf("[HEADERS] Unable to set custom header: %u\n", GetLastError());
+		}
+	}
+
 	// if no proxy is set, we should look to see if we can (and should) use the system
 	// proxy settings for the given user.
 	if (!ctx->proxy)
@@ -904,6 +912,7 @@ static void transport_destroy_http(Transport* transport)
 			SAFE_FREE(ctx->proxy_pass);
 			SAFE_FREE(ctx->proxy_user);
 			SAFE_FREE(ctx->ua);
+			SAFE_FREE(ctx->headers);
 			SAFE_FREE(ctx->uri);
 			if (ctx->proxy_for_url)
 			{
@@ -979,6 +988,10 @@ Transport* transport_create_http(MetsrvTransportHttp* config)
 	if (config->ua[0])
 	{
 		ctx->ua = _wcsdup(config->ua);
+		wcstok_s(ctx->ua, L"|", &ctx->headers);
+		//dprintf("[TRANS HTTP] ctx->ua: %S", ctx->ua);
+		//dprintf("[TRANS HTTP] ctx->headers: %S", ctx->headers);
+
 	}
 	dprintf("[TRANS HTTP] Given proxy host: %S", config->proxy.hostname);
 	if (config->proxy.hostname[0])

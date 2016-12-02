@@ -40,6 +40,14 @@ static HINTERNET get_request_wininet(HttpTransportContext *ctx, BOOL isGet, cons
 			break;
 		}
 
+		if (ctx->headers)
+		{
+			if (!HttpAddRequestHeadersW(hReq, ctx->headers, (ULONG)-1L, HTTP_ADDREQ_FLAG_ADD)) // or WINHTTP_ADDREQ_FLAG_REPLACE)
+			{
+				dprintf("[HEADERS] Unable to set custom header: %u\n", GetLastError());
+			}
+		}
+
 		if (ctx->ssl)
 		{
 			DWORD secureFlags = SECURITY_FLAG_IGNORE_CERT_CN_INVALID

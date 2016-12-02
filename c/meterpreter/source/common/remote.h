@@ -213,6 +213,7 @@ typedef struct _HttpTransportContext
 
 	CSTRTYPE url;                         ///! Pointer to the URL stored with the transport.
 	STRTYPE ua;                           ///! User agent string.
+	STRTYPE headers;                      ///! Headers.
 	STRTYPE uri;                          ///! UUID encoded as a URI.
 	STRTYPE new_uri;                      ///! New URI for stageless URI switches
 	STRTYPE proxy;                        ///! Proxy details.
