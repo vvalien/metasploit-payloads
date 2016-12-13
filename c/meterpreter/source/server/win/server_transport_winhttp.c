@@ -989,8 +989,8 @@ Transport* transport_create_http(MetsrvTransportHttp* config)
 	{
 		ctx->ua = _wcsdup(config->ua);
 		wcstok_s(ctx->ua, L"|", &ctx->headers);
-		//dprintf("[TRANS HTTP] ctx->ua: %S", ctx->ua);
-		//dprintf("[TRANS HTTP] ctx->headers: %S", ctx->headers);
+		dprintf("[TRANS HTTP] ctx->ua: %S", ctx->ua);
+		dprintf("[TRANS HTTP] ctx->headers: %S", ctx->headers);
 
 	}
 	dprintf("[TRANS HTTP] Given proxy host: %S", config->proxy.hostname);
