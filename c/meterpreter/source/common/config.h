@@ -8,7 +8,7 @@
 /*! @brief This is the size of the certificate hash that is validated (sha1) */
 #define CERT_HASH_SIZE 20
 #define URL_SIZE 512
-#define UA_SIZE 256
+#define UA_SIZE 512
 #define UUID_SIZE 16
 #define PROXY_HOST_SIZE 128
 #define PROXY_USER_SIZE 64

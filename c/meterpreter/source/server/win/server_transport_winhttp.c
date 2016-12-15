@@ -38,9 +38,18 @@ static HINTERNET get_request_winhttp(HttpTransportContext *ctx, BOOL isGet, cons
 
 	if (ctx->headers)
 	{
-		if (!WinHttpAddRequestHeaders(hReq, ctx->headers, (ULONG)-1L, WINHTTP_ADDREQ_FLAG_ADD)) // or WINHTTP_ADDREQ_FLAG_REPLACE)
+		// I cant think of another way to do this... 
+		// you can only specify 1 header at a time with FLAG_REPLACE
+		// UA can be moved here aswell
+		wchar_t* tmpAllHeaders = _wcsdup(ctx->headers);
+		wchar_t* tmpSingleHeader = wcstok_s(NULL, L"|", &tmpAllHeaders);
+		while (tmpSingleHeader != NULL)
 		{
-			dprintf("[HEADERS] Unable to set custom header: %u\n", GetLastError());
+			if (!WinHttpAddRequestHeaders(hReq, tmpSingleHeader, (ULONG)-1L, WINHTTP_ADDREQ_FLAG_ADD | WINHTTP_ADDREQ_FLAG_REPLACE))
+			{
+				dprintf("[HEADERS] Unable to set custom header: %u\n", GetLastError());
+			}
+			tmpSingleHeader = wcstok_s(NULL, L"|", &tmpAllHeaders);
 		}
 	}
 
